@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # Copyright 2018 Delphix
 #
@@ -13,9 +14,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+#
 
-*.dsc
-*.tar.xz
-*.buildinfo
-*.changes
-*.deb
+if [[ -z "$KVERS" ]]; then
+	export KVERS=$(uname -r)
+fi
+
+unset PLATFORM
+for platform in generic aws gcp azure kvm; do
+	if [[ "$KVERS" =~ .*${platform} ]]; then
+		PLATFORM="$platform"
+		break;
+	fi
+done
+
+if [[ -z "$PLATFORM" ]]; then
+	echo "Error: Unable to determine platform for KVERS=$KVERS." >&2
+	exit 1
+fi
+
+sed "s/@@KVERS@@/$KVERS/g; s/@@PLATFORM@@/$PLATFORM/g" \
+	debian/control.in >debian/control

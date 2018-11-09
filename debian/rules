@@ -56,6 +56,13 @@ DEPENDS += ansible, \
 DEPENDS += ubuntu-dbgsym-keyring,
 
 #
+# This package contains a consolidation for third-party packages built
+# by delphix as well as build info for all packages built by the linux-pkg
+# framework.
+#
+DEPENDS += delphix-extra,
+
+#
 # These packages are tools that are intended for human convenience. The
 # product should not rely on them programmatically. They may be updated
 # or replaced without regard for backward compatibility.
