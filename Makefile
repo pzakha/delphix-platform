@@ -29,7 +29,8 @@ package:
 	dch --create --package delphix-platform -v 0.0.1 \
 			"Automatically generated changelog entry."
 	dpkg-buildpackage -b -uc -us
-	mv ../delphix-platform_*_amd64.deb artifacts/
+	mv ../delphix-platform*.deb artifacts/
+	mv ../delphix-kernel*.deb artifacts/
 
 shellcheck:
 	shellcheck \
