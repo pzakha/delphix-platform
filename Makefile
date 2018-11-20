@@ -25,7 +25,6 @@ check: shellcheck shfmtcheck
 package:
 	rm -rf artifacts
 	mkdir artifacts
-	./configure.sh
 	dch --create --package delphix-platform -v 0.0.1 \
 			"Automatically generated changelog entry."
 	dpkg-buildpackage -b -uc -us
