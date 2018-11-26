@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+VERSION := 0.0.1
+
 .PHONY: \
 	check \
 	package \
@@ -25,11 +27,10 @@ check: shellcheck shfmtcheck
 package:
 	rm -rf artifacts
 	mkdir artifacts
-	dch --create --package delphix-platform -v 0.0.1 \
+	dch --create --package delphix-platform -v $(VERSION) \
 			"Automatically generated changelog entry."
 	dpkg-buildpackage -b -uc -us
 	mv ../delphix-platform*.deb artifacts/
-	mv ../delphix-kernel*.deb artifacts/
 
 shellcheck:
 	shellcheck \
