@@ -52,7 +52,8 @@ SHELL_SCRIPTS := \
 	usr/bin/download-latest-image \
 	usr/bin/unpack-image \
 	var/lib/delphix-platform/ansible/apply \
-	var/lib/delphix-platform/os-migration
+	var/lib/delphix-platform/os-migration \
+	var/lib/delphix-platform/mds-migration
 
 shellcheck:
 	shellcheck $(SHELL_SCRIPTS)

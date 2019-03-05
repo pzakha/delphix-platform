@@ -22,6 +22,10 @@ MIGRATE_CONFIG_LOG="/var/delphix/migration/log"
 # Linux.
 PERFORM_MIGRATION="/var/delphix/migration/perform-migration"
 
+# This file is used by the delphix-mds-migration service to determine if it
+# should start.
+PERFORM_MDS_MIGRATION="/var/delphix/migration/perform-mds-migration"
+
 function die() {
 	echo "$(basename "$0"): $*" >&2
 	exit 1
@@ -51,6 +55,13 @@ function perform_migration() {
 		>>"$MIGRATE_CONFIG_LOG"
 	"$MIGRATE_CONFIG_SCRIPT" post-upgrade >>"$MIGRATE_CONFIG_LOG" ||
 		die "Failed migrate_config post-upgrade"
+
+	# Enable the temporary mds-migration service
+	systemctl enable delphix-mds-migration.service ||
+		die "Failed to enable the delphix-mds-migration service"
+	touch "$PERFORM_MDS_MIGRATION" ||
+		die "Failed to create $PERFORM_MDS_MIGRATION."
+
 	rm "$PERFORM_MIGRATION" || die "Failed to remove $PERFORM_MIGRATION"
 }
 

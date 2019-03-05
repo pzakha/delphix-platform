@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# Copyright 2019 Delphix
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# The perform-mds-migration flag file is created by the delphix-migration
+# service.
+PERFORM_MDS_MIGRATION="/var/delphix/migration/perform-mds-migration"
+MDS_CLIENT="/opt/delphix/server/bin/mds_client"
+
+function die() {
+	echo "$(basename "$0"): $*" >&2
+	exit 1
+}
+
+function remove_analytics_data() {
+	command="TRUNCATE dlpx_analytics_slice; TRUNCATE analytics_datapoint;"
+	echo "Running MDS Command: '$command'"
+	$MDS_CLIENT -- -c "$command" || die "Failed mds_client command."
+}
+
+remove_analytics_data
+
+rm "$PERFORM_MDS_MIGRATION" || die "Failed to remove $PERFORM_MDS_MIGRATION"
