@@ -21,3 +21,4 @@ debian/delphix-platform.debhelper.log
 debian/delphix-platform.substvars
 debian/delphix-platform
 debian/files
+stage

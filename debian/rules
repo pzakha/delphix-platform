@@ -128,6 +128,22 @@ DEPENDS += bcc-tools, \
 %:
 	dh $@
 
+override_dh_install:
+	#
+	# All the files that we want to include in this package have to
+	# be present in the "stage" directory. Here we move them into 
+	# debian/tmp since it is a special directory and dh_install will
+	# strip "debian/tmp" from the destination path when --auto-dest
+	# is set. 
+	#
+	# Note that the debian/tmp/ directory is cleaned up when
+	# dpkg-buildpkg is ran so we cannot use debian/tmp/ instead of
+	# stage/ when preparing the files.
+	#
+	mkdir -p debian/tmp
+	mv stage/* debian/tmp/
+	dh_install --autodest "debian/tmp/*"
+
 override_dh_gencontrol:
 	dh_gencontrol -- -Vdelphix:Depends="$(DEPENDS)"
 

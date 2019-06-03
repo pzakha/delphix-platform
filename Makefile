@@ -22,6 +22,8 @@ ALL_PLATFORMS := aws azure esx gcp kvm
 #
 VERSION := $(shell date '+%Y.%m.%d.%H')
 
+PKG_FILES := stage
+
 .PHONY: \
 	check \
 	package \
@@ -34,16 +36,25 @@ packages: $(addprefix package-,$(ALL_PLATFORMS))
 
 package-%:
 	@rm -f debian/changelog
+	@rm -rf $(PKG_FILES)
 
 	dch --create --package delphix-platform -v $(VERSION) \
 			"Automatically generated changelog entry."
 
+	# Copy the files that should be in the package to the staging directory.
+	mkdir $(PKG_FILES)
+	cp -r files/common/* $(PKG_FILES)/
+	if [ -d files/$*/ ]; then \
+		cp -r files/$*/* $(PKG_FILES)/; \
+	fi
+
 	sed "s/@@TARGET_PLATFORM@@/$*/" \
-		var/lib/delphix-appliance/platform.in \
-		>var/lib/delphix-appliance/platform
+		$(PKG_FILES)/var/lib/delphix-appliance/platform.in \
+		>$(PKG_FILES)/var/lib/delphix-appliance/platform
+	rm $(PKG_FILES)/var/lib/delphix-appliance/platform.in
 
 	./scripts/download-signature-key.sh upgrade 5.3 \
-		>var/lib/delphix-appliance/key-public.pem.upgrade.5.3
+		>$(PKG_FILES)/var/lib/delphix-appliance/key-public.pem.upgrade.5.3
 
 	sed "s/@@TARGET_PLATFORM@@/$*/" debian/control.in >debian/control
 
