@@ -63,8 +63,8 @@ function perform_migration() {
 	touch "$PG_REINDEX" || die "Failed to create $PG_REINDEX"
 	chown postgres "$PG_REINDEX" || die "Failed to chown $PG_REINDEX"
 
-	echo "$(date): Running migrate_config post-upgrade" \
-		>>"$MIGRATE_CONFIG_LOG"
+	echo $(date): Running migrate_config post-upgrade \
+		      >>"$MIGRATE_CONFIG_LOG"
 	"$MIGRATE_CONFIG_SCRIPT" post-upgrade >>"$MIGRATE_CONFIG_LOG" 2>&1 ||
 		die "Failed migrate_config post-upgrade, see" \
 			"$MIGRATE_CONFIG_LOG"
