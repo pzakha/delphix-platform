@@ -148,6 +148,7 @@ DEPENDS += bcc-tools, \
 	   psmisc, \
 	   ptools, \
 	   ptools-dbgsym, \
+	   ptools2, \
 	   pv, \
 	   screen, \
 	   sdb, \
